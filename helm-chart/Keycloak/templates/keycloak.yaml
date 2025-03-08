@@ -86,11 +86,11 @@ spec:
               mountPath: '/etc/ssl'
               readOnly: true
 
-          # readinessProbe:
-          #   httpGet:
-          #     path: "/keycloak/"
-          #     port: 8443  
-          #     scheme: HTTPS  
+          readinessProbe:
+            httpGet:
+              path: "/keycloak/"
+              port: 8443  
+              scheme: HTTPS  
 
       volumes:
 
