@@ -11,4 +11,4 @@ configMap:
 
 secret:
   name: keycloak-secret
-  KC_DB_PASSWORD: "passer@123!"
+  KC_DB_PASSWORD: "{{set inline }}"

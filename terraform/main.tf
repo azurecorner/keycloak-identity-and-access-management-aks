@@ -18,7 +18,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
 
 
   identity {
-    type         = "SystemAssigned"
+    type = "SystemAssigned"
 
   }
 
@@ -26,9 +26,9 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   sku_tier           = var.kubernetes_sku_tier
 
   default_node_pool {
-    name           = "agentpool"
-    vm_size        = var.kubernetes_cluster_vm_size
-    node_count     = var.kubernetes_cluster_node_count
+    name       = "agentpool"
+    vm_size    = var.kubernetes_cluster_vm_size
+    node_count = var.kubernetes_cluster_node_count
 
   }
 
@@ -54,7 +54,7 @@ resource "azurerm_postgresql_flexible_server" "postgresql_flexible_server" {
 
   administrator_login           = var.postgresql_server_admin_login
   administrator_password        = var.postgresql_server_admin_password
-
+  zone                          = 1
   sku_name                      = "B_Standard_B1ms"
   public_network_access_enabled = true
 
@@ -75,3 +75,13 @@ resource "azurerm_postgresql_flexible_server_database" "postgresql_flexible_serv
 
   depends_on = [azurerm_postgresql_flexible_server.postgresql_flexible_server]
 }
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "postgresql_flexible_server_firewall_rules" {
+  name             = "FirewallRule-${azurerm_postgresql_flexible_server.postgresql_flexible_server.name}"
+  server_id        = azurerm_postgresql_flexible_server.postgresql_flexible_server.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
+
+  depends_on = [azurerm_postgresql_flexible_server.postgresql_flexible_server]
+}
+ 
