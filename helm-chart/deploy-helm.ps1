@@ -38,8 +38,13 @@ helm repo update
 
 kubectl create namespace $NAMESPACE
 
-#kubectl create secret tls secret-name --cert=path/to/tls.crt --key=path/to/tls.key
+#kubectl create secret tls secret-name --cert=ssl/tls.crt --key=ssl/tls.key
+<# mkdir ssl
+openssl pkcs12 -in ssl/datasync-ssl.pfx -nocerts -nodes -out ssl/tls.key
+openssl pkcs12 -in ssl/datasync-ssl.pfx -clcerts -nokeys -out ssl/tls.crt #>
 
+# cat ssl/tls.crt
+# cat ssl/tls.key
 
 Write-Host "Deploying keycloak  chart..." -ForegroundColor Green
 
