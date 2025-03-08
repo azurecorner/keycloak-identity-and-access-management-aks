@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-configmap
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: "keycloak-deployment"
+data:
+  KC_DB_URL: "jdbc:postgresql://logcornerdevpg-flexible.postgres.database.azure.com/logcorner"
+  KC_DB_USERNAME: "logcorner"

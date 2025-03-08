@@ -1,0 +1,14 @@
+namespace: dev
+KC_HOSTNAME: logcorner.datasynchro.com
+
+KC_IMAGE: "quay.io/keycloak/keycloak:26.0.5"
+replicaCount: 1
+
+configMap:
+  name: keycloak-config
+  KC_DB_URL: "jdbc:postgresql://logcornerdevpg-flexible.postgres.database.azure.com/logcorner"
+  KC_DB_USERNAME: "logcorner"
+
+secret:
+  name: keycloak-secret
+  KC_DB_PASSWORD: "passer@123!"

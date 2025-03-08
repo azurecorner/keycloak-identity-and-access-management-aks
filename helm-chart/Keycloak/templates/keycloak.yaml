@@ -1,0 +1,114 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "keycloak-deployment"
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: "keycloak-deployment"
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: "RollingUpdate"
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: "keycloak-deployment"
+    spec:
+      containers:
+        - name: "keycloak-deployment"
+          image: "{{ .Values.KC_IMAGE }}"
+          imagePullPolicy: "Always"
+          env:
+            - name: KC_CACHE_STACK
+              value: 'kubernetes'
+            - name: JAVA_OPTS
+              value: '-Djgroups.dns.query=keycloak-service.{{ .Values.namespace }}.svc.cluster.local'
+            - name: "KC_HOSTNAME"
+              value: "{{ .Values.KC_HOSTNAME }}"
+            - name: KC_HOSTNAME_STRCT_HTTPS
+              value: 'true'
+            - name: KC_HTTP_RELATIVE_PATH
+              value: '/keycloak/'
+            - name: "KEYCLOAK_ADMIN"
+              value: "admin"
+            - name: "KEYCLOAK_ADMIN_PASSWORD"
+              value: "admin"
+            - name: "KC_HOSTNAME_STRICT_BACKCHANNEL"
+              value: "false"
+            - name: "KC_HTTP_ENABLED"
+              value: "false" 
+            - name: KC_HTTPS_CERTIFICATE_FILE
+              value: '/etc/ssl/tls.crt'
+            - name: KC_HTTPS_CERTIFICATE_KEY_FILE
+              value: '/etc/ssl/tls.key'
+            - name: "KC_HEALTH_ENABLED"
+              value: "true"
+            - name: "KC_PROXY"
+              value: "edge"
+            - name: "KC_HOSTNAME_PORT"
+              value: "8443"  
+            
+            - name: "KC_DB"
+              value: "postgres"
+            - name: KC_DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: keycloak-configmap
+                  key: KC_DB_URL
+
+            - name: "KC_DB_USERNAME"
+              valueFrom:
+                configMapKeyRef:
+                  name: keycloak-configmap
+                  key: KC_DB_USERNAME
+                  
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-secret  
+                  key: KC_DB_PASSWORD    
+            
+          ports:
+            - name: "http"
+              containerPort: 8080
+            - name: "https"
+              containerPort: 8443
+          args: ["start"]
+
+          volumeMounts:
+ 
+            - name: tls
+              mountPath: '/etc/ssl'
+              readOnly: true
+
+          readinessProbe:
+            httpGet:
+              path: "/keycloak/"
+              port: 8443  
+              scheme: HTTPS  
+
+      volumes:
+
+
+        - name: tls
+          secret:
+            secretName: secret-name
+            optional: false
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "keycloak-service"
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+    - port: 443
+      targetPort: 8443
+  selector:
+    app: "keycloak-deployment"
+  type: "LoadBalancer" 
