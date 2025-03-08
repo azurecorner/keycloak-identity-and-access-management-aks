@@ -6,8 +6,8 @@ replicaCount: 1
 
 configMap:
   name: keycloak-config
-  KC_DB_URL: "jdbc:postgresql://logcornerdevpg-flexible.postgres.database.azure.com/logcorner"
-  KC_DB_USERNAME: "logcorner"
+  KC_DB_URL: "jdbc:postgresql://datasynchrodevpg-srv.postgres.database.azure.com/datasynchro"
+  KC_DB_USERNAME: "datasynchro"
 
 secret:
   name: keycloak-secret

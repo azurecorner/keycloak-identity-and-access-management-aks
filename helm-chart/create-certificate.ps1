@@ -5,7 +5,7 @@ if ($pfxPassword -isnot [System.Security.SecureString]) {
     $pfxPassword = ConvertTo-SecureString $pfxPassword -AsPlainText -Force
 }
 
-$domain="cloud-devops-craft.com"
+$domain="datasynchro.com"
 
 $currentPath = Get-Location
 
@@ -13,7 +13,7 @@ Write-Host "path = $currentPath"
 
 Write-Host "Create the root signing cert"
 $root = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
-    -Subject "CN=cloud-devops-craft-com-signing-root" -KeyExportPolicy Exportable `
+    -Subject "CN=datasynchro-com-signing-root" -KeyExportPolicy Exportable `
     -HashAlgorithm sha256 -KeyLength 4096 `
     -CertStoreLocation "Cert:\CurrentUser\My" -KeyUsageProperty Sign `
     -KeyUsage CertSign -NotAfter (get-date).AddYears(5)
