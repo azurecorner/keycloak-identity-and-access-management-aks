@@ -16,3 +16,10 @@ terraform/terraform.tfplan
 terraform/terraform.tfstate.d/dev/terraform.tfstate.backup
 terraform/terraform.tfstate.d/integ/terraform.tfstate
 terraform/terraform.tfstate.d/integ/terraform.tfstate.backup
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/keycloak-identity-and-access-management-aks/FileContentIndex/9ea6150d-43d5-4f82-a605-80104e7fc23a.vsidx
+.vs/keycloak-identity-and-access-management-aks/v17/.wsuo
+.vs/keycloak-identity-and-access-management-aks/v17/DocumentLayout.json
+.vs/keycloak-identity-and-access-management-aks/FileContentIndex/3d99238a-27f6-4dba-84ed-6468b4945903.vsidx
+/.vs/keycloak-identity-and-access-management-aks
