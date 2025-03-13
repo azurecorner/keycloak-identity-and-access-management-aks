@@ -23,3 +23,8 @@ terraform/terraform.tfstate.d/integ/terraform.tfstate.backup
 .vs/keycloak-identity-and-access-management-aks/v17/DocumentLayout.json
 .vs/keycloak-identity-and-access-management-aks/FileContentIndex/3d99238a-27f6-4dba-84ed-6468b4945903.vsidx
 /.vs/keycloak-identity-and-access-management-aks
+terraform/.terraform/providers/registry.terraform.io/hashicorp/azurerm/3.117.1/windows_amd64/LICENSE.txt
+terraform/.terraform/providers/registry.terraform.io/hashicorp/azurerm/3.117.1/windows_amd64/terraform-provider-azurerm_v3.117.1_x5.exe
+terraform/.terraform/providers/registry.terraform.io/hashicorp/random/3.7.1/windows_amd64/LICENSE.txt
+terraform/.terraform/providers/registry.terraform.io/hashicorp/random/3.7.1/windows_amd64/terraform-provider-random_v3.7.1_x5.exe
+.gitignore
