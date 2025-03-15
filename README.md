@@ -3,7 +3,7 @@
 ## Introduction  
 This tutorial explains how to set up Keycloak, an Identity and Access Management (IAM) solution, on Azure Kubernetes Service (AKS). The infrastructure is provisioned using Terraform, and Keycloak is deployed with Helm. PostgreSQL is used as the database for Keycloak.
 
-## Main Steps  
+## A. Main Steps  
 
 ### 1. **Infrastructure Provisioning with Terraform**  
 - Create an AKS cluster on Azure.  
@@ -21,8 +21,6 @@ This tutorial explains how to set up Keycloak, an Identity and Access Management
 - Secure access with TLS/SSL.  
 - Implement an Ingress Controller to securely expose Keycloak.  
 
-## Summary  
-With this approach, Keycloak is deployed in an automated and reproducible manner on Azure Kubernetes Service. Terraform handles infrastructure provisioning, while Helm simplifies Keycloak deployment and configuration.
 
 ## Technologies Used  
 - **Terraform**: Infrastructure provisioning.  
@@ -37,17 +35,15 @@ With this approach, Keycloak is deployed in an automated and reproducible manner
 - [Terraform Azure Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)  
 
 
+## B. Terraform Configuration for Deploying AKS and PostgreSQL on Azure
+source =>  .\keycloak-identity-and-access-management-aks\terraform\main.tf
 
-# ######################
-# Terraform Configuration for Deploying AKS and PostgreSQL on Azure
-
-## Overview  
 This Terraform file provisions an Azure infrastructure consisting of:  
 - **An Azure Kubernetes Service (AKS) cluster**  
 - **A PostgreSQL flexible server**  
 - **Networking and firewall configurations**  
 
-## Resources Created  
+
 
 ### 1. **Resource Group**  
 - Defines a **resource group** to contain all deployed Azure resources.  
@@ -61,7 +57,7 @@ This Terraform file provisions an Azure infrastructure consisting of:
   - **Networking configured** with `kubenet` and a Load Balancer.  
 
 ### 3. **PostgreSQL Flexible Server**  
-- Deploys a **PostgreSQL flexible server** in **France Central** (defined in `locals`).  
+- Deploys a **PostgreSQL flexible server** .  
 - Uses **PostgreSQL version 16**.  
 - Configures:  
   - **Admin credentials** for database access.  
@@ -75,21 +71,10 @@ This Terraform file provisions an Azure infrastructure consisting of:
 ### 5. **PostgreSQL Firewall Rule**  
 - Defines a **firewall rule** allowing access from **all IP addresses (`0.0.0.0/0`)**, making it publicly accessible (which is insecure for production environments).  
 
-## Summary  
-This Terraform configuration automates the deployment of:  
-- **An AKS cluster** for running containerized applications.  
-- **A PostgreSQL database** for data storage.  
-- **Networking and access settings** configurable via Terraform variables.  
 
-## Potential Improvements  
-- **Security risk:** The firewall allows all IPs (`0.0.0.0/0`), which should be restricted.  
-- **Performance tuning:** The PostgreSQL storage and performance settings could be further optimized.  
+## C. Automating Keycloak Deployment on Azure Kubernetes Service (AKS)
+source => .\keycloak-identity-and-access-management-aks\helm-chart\deploy-helm.ps1
 
-# #########################################
-
-# Automating Keycloak Deployment on Azure Kubernetes Service (AKS)
-
-## Overview  
 This script automates the deployment of **Keycloak** on **Azure Kubernetes Service (AKS)** using **Helm** and configures an **NGINX Ingress Controller** for external access.
 
 ## Steps  
@@ -129,13 +114,6 @@ This script automates the deployment of **Keycloak** on **Azure Kubernetes Servi
 - Waits for the **Keycloak pod to be fully ready**.  
 - Attempts to access Keycloak via **HTTPS** using `curl`, resolving the domain name to the assigned **external IP**.  
 
-## Summary  
-This script **automates** the entire Keycloak deployment process on AKS by:  
-✅ **Provisioning and configuring AKS**  
-✅ **Installing an Ingress Controller for external access**  
-✅ **Deploying Keycloak with PostgreSQL as its database**  
-✅ **Ensuring security with TLS encryption**  
-✅ **Verifying the deployment and testing Keycloak accessibility**  
 
 ## Technologies Used  
 - **Azure Kubernetes Service (AKS)** – Manages containerized applications.  
@@ -144,10 +122,8 @@ This script **automates** the entire Keycloak deployment process on AKS by:
 - **PostgreSQL** – Database for Keycloak.  
 - **Kubernetes (kubectl)** – Manages cluster resources.  
 
-Let me know if you need any modifications! 🚀
-
-
-# keycloak-identity-and-access-management-aks
+## D. Deploy and test
+### Deploy Terraform files
 
 terraform workspace new dev
 
@@ -159,20 +135,60 @@ terraform plan  -var-file="dev.tfvars" -var "postgresql_server_admin_password=pa
   
 terraform apply terraform.tfplan 
 
+### Deploy Helm chart
 
+./deploy-helm.ps1
 
-# testing
+### testing
+
+#### get list of pods
 
 ![pods](https://github.com/user-attachments/assets/854fd31d-c702-4e39-baa0-7a38f5f26594)
 
+#### get list of services
+
 ![service](https://github.com/user-attachments/assets/0dc0e0d4-9add-4f53-976d-be19ccde3832)
+
+#### update DNS zone to point domain name to ingress ip address
 
 ![dns](https://github.com/user-attachments/assets/a3443a4d-4fd4-43ca-8af2-fedc017835bd)
 
+##### verify if dns setting is working
+
 ![nslookup](https://github.com/user-attachments/assets/c512e346-50d7-411a-8063-3592e4e3c34f)
+
+#### open keycloak in brower
 
 ![browser](https://github.com/user-attachments/assets/5fec895a-8dbf-4e6d-b8ab-0c639c58d38a)
 
+
+
+## Summary
+
+With this approach, Keycloak is deployed in an automated and reproducible manner on Azure Kubernetes Service (AKS). Terraform handles infrastructure provisioning, while Helm simplifies Keycloak deployment and configuration.
+
+### Deployment Overview
+
+This Terraform configuration automates the deployment of:
+
+- **An AKS cluster** for running containerized applications.  
+- **A PostgreSQL database** for data storage.  
+- **Networking and access settings**, configurable via Terraform variables.  
+
+### Potential Improvements
+
+- **Security Risk:** The firewall allows all IPs (`0.0.0.0/0`), which should be restricted.  
+- **Performance Tuning:** The PostgreSQL storage and performance settings could be further optimized.  
+
+### Keycloak Deployment Automation
+
+This script **automates** the entire Keycloak deployment process on AKS by:
+
+- **Provisioning and configuring AKS**  
+- **Installing an Ingress Controller for external access**  
+- **Deploying Keycloak with PostgreSQL as its database**  
+- **Ensuring security with TLS encryption**  
+- **Verifying the deployment and testing Keycloak accessibility**  
 
 
 
